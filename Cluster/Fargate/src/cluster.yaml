@@ -1,0 +1,55 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: <EKS_Cluster_Name>
+  version: "<EKS_Version>"
+  region: <Region>
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
+iamIdentityMappings:
+  - arn: arn:aws:iam::<Account ID>:role/<Role name>
+    groups:
+      - system:masters
+    username: admin
+    noDuplicateARNs: true
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+
+vpc:
+  subnets:
+    public:
+      <Region>a: { id: public_a }
+      <Region>b: { id: public_b }
+      <Region>c: { id: public_c }
+    private:
+      <Region>a: { id: private_a }
+      <Region>b: { id: private_b }
+      <Region>c: { id: private_c }
+
+fargateProfiles:
+  - name: fp-default
+    selectors:
+      - namespace: default
+      - namespace: kube-system
+      - namespace: cert-manager
+  - name: <fargate name>
+    selectors:
+      - namespace: <namespace>
+        labels:
+          <key>: <value>

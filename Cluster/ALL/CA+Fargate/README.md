@@ -1,0 +1,1 @@
+[Cluster AutoScalier](https://github.com/architecture-studys/AWS/blob/main/EKS/Cluster/EC2/CA/Cluster.yaml)

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: <Pod aame>
+    labels:
+    <key>: <value>
+spec:
+  containers:
+  - name: <container name>
+    image: <image>
+    resources:
+      requests:
+        cpu: <number>
+        momory: <number>
+      limits:
+        cpu: <number>
+        memory: <number>
+    ports:
+    - containerPort: <port>
+    env:
+    - name: <name>
+      value: "<value>"
+    - name: <name>
+      valueFrom:
+         fieldRef:
+           fieldPath: <value>
+    - name: <name>
+      valueFrom:
+         resourceFieldRef:
+           containerName: <container name>
+           resource: <value>

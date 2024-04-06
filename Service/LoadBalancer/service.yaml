@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: <Service name>
+	namespace: <namespace>
+spec:
+  selector:
+    <key>: <value>
+  ports:
+    - protocol: <protocol>
+      port: <Port>
+      targetPort: <Port>
+  type: LoadBalancer

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <Deployment Name>
+  namespace: <Namespace>
+  labels:
+    <Key>: <Value>
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      <Key>: <Value>
+  template:
+    metadata:
+      labels:
+        <Key>: <Value>
+    spec:
+      containers:
+      - name: <Container Name>
+        image: <IMAGE>
+        ports:
+        - containerPort: <Port>
+        volumeMounts:
+        - name: efs-pv
+          mountPath: <Path>
+      volumes:
+      - name: efs-claim
+        persistentVolumeClaim:
+          claimName: efs-claim

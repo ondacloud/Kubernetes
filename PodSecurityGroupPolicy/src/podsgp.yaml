@@ -1,0 +1,12 @@
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: <Pod_Security_Name>
+  namespace: <Namespace>
+spec:
+  podSelector:
+    matchLabels:
+      <Key>: <Value> #Pod label
+  securityGroups:
+    groupIds:
+      - <Security Group ID> # Security Group ID

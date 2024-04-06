@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <Deployment name>
+  namespace: <namespace>
+  labels:
+    <key>: <value>
+spec:
+  replicas: <number>
+  selector:
+    matchLabels:
+      <key>: <value>
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: <number%>
+      maxUnavailable: <number%>
+  template:
+    metadata:
+      labels:
+        <key>: <value>
+    spec:
+      containers:
+      - name: <container name>
+        image: <image>
+        ports:
+        - containerPort: <Port>

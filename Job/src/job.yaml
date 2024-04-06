@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <Job name>
+  namespcae: <namescpase>
+spec:
+  completions: <number>
+  parallelism: <number>
+  activeDeadlineSeconds: <number>
+  template:
+    spec:
+      containers:
+      - name: <container name>
+        image: <image>
+        command:
+         - "<command>"
+         - "<command>"
+         - "<command>"
+      restartPolicy: <value>     
+  backoffLimit: <number>
