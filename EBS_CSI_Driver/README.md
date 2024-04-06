@@ -3,7 +3,7 @@
 # ENV
 ```shell
 CLUSTER_NAME="<EKS_CLUSTER_NAME>"
-CLUSTER_OIDC=$(aws eks describe-cluster --name skills-cluster --query "cluster.identity.oidc.issuer" --output text | cut -c 9-100)
+CLUSTER_OIDC=$(aws eks describe-cluster --name $CLUSTER_NAME --query "cluster.identity.oidc.issuer" --output text | cut -c 9-100)
 ACCOUNT=$(aws sts get-caller-identity --query "Account" --output text)
 ```
 
