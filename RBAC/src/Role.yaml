@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: <Role name>
+  namespace: <namespcae>
+rules:
+- apiGroups: [""] 
+  resources: ["<value>"]
+  verbs: ["<vale>", "<vale>", "<vale>"]
