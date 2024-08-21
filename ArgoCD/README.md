@@ -6,6 +6,11 @@ kubectl create ns argocd
 ```
 
 ```shell
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update argo
+```
+
+```shell
 cat <<\EOF> argocd-value.yaml
 configs:
   cm:
@@ -23,32 +28,35 @@ EOF
 ```
 
 ```shell
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-rm argocd-linux-amd64
-```
-
-```shell
-helm repo add argo https://argoproj.github.io/argo-helm
-helm repo update argo
-```
-
-```shell
 helm install argocd argo/argo-cd \
     --create-namespace \
     --namespace argocd \
     --values argocd-value.yaml
 ```
 
-# Join ArgoCD Server
 ```shell
-kubectl port-forward svc/argocd-server -n argocd --address=0.0.0.0 8080:443 &
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-argocd login 127.0.0.1:8080  # ID : admin
-argocd account update-password
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm -rf argocd-linux-amd64
 ```
 
-# Create Ingress on ArgoCD Server
+```shell
+sudo dnf install -y expect
+kubectl port-forward svc/argocd-server -n argocd --address=0.0.0.0 8080:443 > /dev/null &
+ARGO_PW=(`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`)
+echo y | argocd login --insecure --username admin --password $ARGO_PW 127.0.0.1:8080  # ID : admin
+expect -c "
+spawn argocd account update-password
+expect -re \".*Enter.*\"
+send \"$ARGO_PW\r\"
+expect -re \".*Enter.*\"
+send \"Skill53##\r\"
+expect -re \".*Confirm.*\"
+send \"Skill53##\r\"
+interact
+"
+```
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
