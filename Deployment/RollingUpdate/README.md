@@ -5,7 +5,8 @@ allow Deployments' update to take place with zero downtime by incrementally upda
 
 ----
 # Create Deployment on RollingUpdate
-```
+
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,6 +36,7 @@ spec:
 ```
 
 # Create Deployment
-```
+
+```shell
 kubectl apply -f deployment.yaml
 ```

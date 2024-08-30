@@ -1,14 +1,14 @@
 <h1 align="center"> Create External-DNS </h1>
 
 # Install External-DNS
-```
-export ClusterName=<Cluster Name>
-export Region=ap-northeast-2
+
+```shell
+export CLUSTER_NAME=<Cluster Name>
+export REGION_CODE=$(aws configure get region)
 export vpc_id=$(aws ec2 describe-vpcs --query "Vpcs[].VpcId[]" --output text)
-export region=ap-northeast-2
 ```
 
-```
+```shell
 cat <<EOF> external-dns-policy.json
 {
   "Version": "2012-10-17",
@@ -44,7 +44,7 @@ aws iam create-policy --policy-name "AllowExternalDNSUpdates" --policy-document 
 
 ```shell
 eksctl create iamserviceaccount \
-    --cluster $ClusterName \
+    --cluster $CLUSTER_NAME \
     --name "external-dns" \
     --namespace default \
     --attach-policy-arn arn:aws:iam::250328188836:policy/AllowExternalDNSUpdates \ --approve
@@ -54,7 +54,7 @@ eksctl create iamserviceaccount \
 aws route53 create-hosted-zone \
     --name "infra.local." \
     --caller-reference "external-dns-test-$(date +%s)" \
-    --vpc "VPCRegion=$region,VPCId=$vpc_id" \
+    --vpc "VPCREGION_CODE=$REGION_CODE,VPCId=$vpc_id" \
     --hosted-zone-config PrivateZone=true
 ```
 
@@ -120,7 +120,7 @@ spec:
             - --txt-owner-id=external-dns
             # - --namespace=skills #해당 secsion 추가 시 해당 namespace에서만 external-dns를 사용할 수 있음
           env:
-            - name: AWS_DEFAULT_REGION
+            - name: AWS_DEFAULT_REGION_CODE
               value: ap-northeast-2
 ```
 
@@ -179,6 +179,6 @@ dig +short web.infra.local
 ```
 
 ```shell
-curl web.infra.local/health
+curl web.infra.local/healthz
 curl web.infra.local/v1/infra
 ```

@@ -5,7 +5,7 @@ metadata:
   name: <EKS_Cluster_Name>
   version: "<EKS_Version>"
   region: <Region>
-    tags:
+  tags:
     karpenter.sh/discovery: <EKS_Cluster_Name>
 
 cloudWatch:
@@ -34,7 +34,7 @@ iam:
       certManager: true
 
 karpenter:
-  version: 'v0.34.3'
+  version: '0.35.2'
   createServiceAccount: true
 
 vpc:
@@ -57,15 +57,3 @@ managedNodeGroups:
     minSize: 2
     maxSize: 20
     privateNetworking: true
-
-fargateProfiles:
-  - name: fp-default
-    selectors:
-      - namespace: default
-      - namespace: kube-system
-      - namespace: cert-manager
-  - name: <fargate name>
-    selectors:
-      - namespace: <namespace>
-        labels:
-          <key>: <value>

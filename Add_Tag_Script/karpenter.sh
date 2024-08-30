@@ -30,7 +30,6 @@ do
     aws ec2 create-tags --resources $name --tags Key=karpenter.sh/discovery,Value=$ClusterName
 done
 
- 
 aws ec2 create-tags \
     --tags "Key=karpenter.sh/discovery,Value=${ClusterName}" \
     --resources ${SECURITY_GROUPS}

@@ -73,18 +73,13 @@ managedNodeGroups:
     minSize: 2
     maxSize: 20
     privateNetworking: true
+    amiFamily: Bottlerocket
+    iam:
+       attachPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+          - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+          - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
     tags:
       k8s.io/cluster-autoscaler/enabled: "true"
       k8s.io/cluster-autoscaler/<EKS_Cluster_Name>: "owned"
-
-fargateProfiles:
-  - name: fp-default
-    selectors:
-      - namespace: default
-      - namespace: kube-system
-      - namespace: cert-manager
-  - name: <fargate name>
-    selectors:
-      - namespace: <namespace>
-        labels:
-          <key>: <value>

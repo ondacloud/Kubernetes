@@ -5,7 +5,8 @@ an all-or-nothing process that lets you update an application immediately, with 
 
 ----
 # Create Deployment on Recreate
-```
+
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,6 +34,7 @@ spec:
 ```
 
 # Create Deployment
-```
+
+```shell
 kubectl apply -f deployment.yaml
 ```

@@ -2,13 +2,13 @@
 
 # ENV
 ```shell
-cluster_name="<EKS_CLUSTER_NAME>"
-cluster_role=$(aws eks describe-cluster --name $cluster_name --query cluster.roleArn --output text | cut -d / -f 2)
+EKS_CLUSTER_NAME="<EKS_CLUSTER_NAME>"
+EKS_CLUSTER_ROLE=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.roleArn --output text | cut -d / -f 2)
 ```
 
 # Attach Policy in Role
 ```shell
-aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSVPCResourceController --role-name $cluster_role
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSVPCResourceController --role-name $EKS_CLUSTER_ROLE
 ```
 
 # Describe Demonset
@@ -29,8 +29,8 @@ kubectl describe no ip-172-168-3-249.ap-northeast-2.compute.internal | grep vpc.
 
 # Create Security Group
 ```shell
-export vpc_id=$(aws ec2 describe-vpcs --query "Vpcs[].VpcId[]" --output text)
-aws ec2 create-security-group --group-name infra-pod-SG --description infra-pod-SG --vpc-id $vpc_id
+export VPC_ID=$(aws ec2 describe-vpcs --query "Vpcs[].VpcId[]" --output text)
+aws ec2 create-security-group --group-name <SG Name> --description <SG Name> --vpc-id $VPC_ID
 aws ec2 authorize-security-group-ingress --group-id sg-00559426854f20b54 --protocol icmp --port -1 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-egress --group-id sg-065fb462800f7b1e6 --protocol icmp --port -1 --cidr 0.0.0.0/0
 ```
