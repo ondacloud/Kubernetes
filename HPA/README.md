@@ -2,10 +2,11 @@
 
 # Install Metrics Server
 ```shell
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/rele ases/latest/download/components.yaml
 ```
 
 # Create HPA
+**Basic**
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -28,6 +29,9 @@ spec:
           averageUtilization: <Number>
 ```
 
+<br>
+
+**Segmentation**
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -53,7 +57,7 @@ spec:
       policies:
       - type: Pods
         value: <Number>
-        periodSeconds: 2<Number>
+        periodSeconds: <Number>
   metrics:
     - type: Resource
       resource:
