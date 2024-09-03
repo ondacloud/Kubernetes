@@ -15,7 +15,7 @@ wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10
 
 ```yaml
 nodeSelector:
-	eks.amazonaws.com/nodegroup: <EKS Node Group Name>
+  eks.amazonaws.com/nodegroup: <EKS Node Group Name>
 ```
 > Deployment 부분 하단에 Node Selector를 추가해줍니다.
 
