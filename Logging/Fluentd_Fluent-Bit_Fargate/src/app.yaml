@@ -1,0 +1,34 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app
+  namespace: default
+data:
+  flb_log_cw: "false"
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush               1
+        Log_Level           info
+        Daemon              off
+
+    [INPUT]
+        Name                tail
+        Path                /log/*.log
+        Tag                 <Deployment Name>
+        Refresh_Interval    10
+        Mem_Buf_Limit       50MB
+        Skip_Long_Lines     On
+
+    [FILTER]
+        Name                grep
+        Match               *<Deployment Name>*
+        Exclude             log /.*healthcheck.*/
+        Exclude             log /.*healthcheck.*/
+        Exclude             log .*healthcheck.*
+
+    [OUTPUT]
+        Name                forward
+        Match               *
+        Host                SVC_IP
+        Port                24224
+        Retry_Limit         False
