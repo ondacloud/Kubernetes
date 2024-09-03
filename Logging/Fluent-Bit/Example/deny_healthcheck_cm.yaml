@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-app-config
+  namespace: fluent-bit
+  labels:
+    k8s-app: fluent-bit
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush                     5
+        Grace                     30
+        Log_Level                 info
+        Daemon                    off
+        HTTP_Server               ${HTTP_SERVER}
+        HTTP_Listen               0.0.0.0
+        HTTP_Port                 ${HTTP_PORT}
+        storage.path              /var/fluent-bit/state/flb-storage/
+        storage.sync              normal
+        storage.checksum          off
+        storage.backlog.mem_limit 5M
+    @INCLUDE host-log.conf
+
+  host-log.conf: |
+    [INPUT]
+        Name                tail
+        Tag                 host.<Deployment Name>.dmesg
+        Path                /var/log/containers/*<Deployment Name>-deployment-*
+
+    [FILTER]
+        Name        grep
+        Match       host.<Deployment Name>.*
+        Exclude      log /.*healthcheck.*/
+        Exclude      log /.*healthcheck.*
+        Exclude      log .*healthcheck.*
+
+    [OUTPUT]
+        Name                cloudwatch_logs
+        Match               host.<Deployment Name>.*
+        region              ap-northeast-2
+        log_group_name      <CloudWatch_Log_Group_Name>
+        log_stream_prefix   from-fluent-bit-
+        auto_create_group   true
