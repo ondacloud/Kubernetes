@@ -12,6 +12,27 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.name=aws-load-balancer-controller
 ```
 
+# Install ALB Controller on helm with use Values
+
+```shell
+cat <<EOF> values.yaml
+nodeSelector: {
+  eks.amazonaws.com/nodegroup: <EKS Node Group Name>
+}
+EOF
+```
+
+```shell
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update eks
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=<cluster name> \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  -f values.yaml
+```
+
 <br>
 
 # Install Karpenter in Fargate
