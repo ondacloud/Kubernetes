@@ -134,7 +134,7 @@ kubectl apply -f gateway.yaml
 ```shell
 kubectl get gateway -n default
 ```
-> 정상적으로 동작 시 PROGRAMMEND가 True로 뜹니다.
+> gateway가 정상적으로 동작 시 PROGRAMMEND가 True로 뜹니다.
 
 ```yaml
 apiVersion: application-networking.k8s.aws/v1alpha1
