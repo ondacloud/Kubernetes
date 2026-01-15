@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: c
+  labels:
+    app: c
+spec:
+  containers:
+    - name: c-cnt
+      image: nginx:latest
