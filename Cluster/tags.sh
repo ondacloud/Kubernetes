@@ -15,16 +15,24 @@ PRIVATE_A_SN_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$PRIV
 PRIVATE_B_SN_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$PRIVATE_B_SN_NAME" --query "Subnets[].SubnetId[]" --output text --region $REGION_CODE)
 PRIVATE_C_SN_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$PRIVATE_C_SN_NAME" --query "Subnets[].SubnetId[]" --output text --region $REGION_CODE)
 
-EKS_NODE_GROUP=$(aws eks list-nodegroups --cluster-name $EKS_CLUSTER_NAME --query 'nodegroups[0]' --output text)
-LAUNCH_TEMPLATE=$(aws eks describe-nodegroup --cluster-name $EKS_CLUSTER_NAME --nodegroup-name $EKS_NODE_GROUP --query 'nodegroup.launchTemplate.{id:id,version:version}' --output text | tr -s "\t" ",")
-SECURITY_GROUPS=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.resourcesVpcConfig.clusterSecurityGroupId | tr -d '"')
-SECURITY_GROUPS=$(aws ec2 describe-launch-template-versions --launch-template-id ${LAUNCH_TEMPLATE%,*} --versions ${LAUNCH_TEMPLATE#*,} --query 'LaunchTemplateVersions[0].LaunchTemplateData.[NetworkInterfaces[0].Groups||SecurityGroupIds]' --output text)
+sed -i "s|public_a|$PUBLIC_A_SN_ID|g" /home/ec2-user/eks/cluster.yaml
+sed -i "s|public_b|$PUBLIC_b_SN_ID|g" /home/ec2-user/eks/cluster.yaml
+sed -i "s|public_c|$PUBLIC_C_SN_ID|g" /home/ec2-user/eks/cluster.yaml
+sed -i "s|private_a|$PRIVATE_A_SN_ID|g" /home/ec2-user/eks/cluster.yaml
+sed -i "s|private_b|$PRIVATE_B_SN_ID|g" /home/ec2-user/eks/cluster.yaml
+sed -i "s|private_c|$PRIVATE_C_SN_ID|g" /home/ec2-user/eks/cluster.yaml
 
-SN_IDS=("$PUBLIC_A_SN_ID" "$PUBLIC_B_SN_ID" "$PUBLIC_C_SN_ID" "$PRIVATE_A_SN_ID" "$PRIVATE_B_SN_ID" "$PRIVATE_C_SN_ID")
+PUBLIC_SN_IDS=("$PUBLIC_A_SN_ID" "$PUBLIC_B_SN_ID" "$PUBLIC_C_SN_ID")
+PRIVATE_SN_IDS=("$PRIVATE_A_SN_ID" "$PRIVATE_B_SN_ID" "$PRIVATE_C_SN_ID")
 
-for name in "${SN_IDS[@]}"
+for name in "${PUBLIC_SN_IDS[@]}"
 do
-    aws ec2 create-tags --resources $name --tags Key=karpenter.sh/discovery,Value=$EKS_CLUSTER_NAME
+    aws ec2 create-tags --resources $name --tags Key=kubernetes.io/cluster/$EKS_CLUSTER_NAME,Value=shared
+    aws ec2 create-tags --resources $name --tags Key=kubernetes.io/role/elb,Value=1
 done
 
-aws ec2 create-tags --tags "Key=karpenter.sh/discovery,Value=$EKS_CLUSTER_NAME" --resources $SECURITY_GROUPS
+for name in "${PRIVATE_SN_IDS[@]}"
+do
+    aws ec2 create-tags --resources $name --tags Key=kubernetes.io/cluster/$EKS_CLUSTER_NAME,Value=shared
+    aws ec2 create-tags --resources $name --tags Key=kubernetes.io/role/internal-elb,Value=1
+done
