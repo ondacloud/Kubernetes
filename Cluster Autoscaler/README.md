@@ -67,3 +67,8 @@ sed -i '/node-group-auto-discovery/a\            - --balance-similar-node-groups
 ```shell
 kubectl apply -f cluster-autoscaler-autodiscover.yaml
 ```
+
+```shell
+kubectl patch deployment cluster-autoscaler -n kube-system --type='json' \
+  -p='[{"op": "add", "path": "/spec/template/spec/nodeSelector", "value":{"type":"addon"}}]'
+```
