@@ -1,4 +1,6 @@
 ### Setup Cluster Autoscaler
+[**Cluster Autoscaler Release**](https://github.com/kubernetes/autoscaler/releases)
+
 ```shell
 REGION_CODE="ap-northeast-2"
 EKS_CLUSTER_NAME="demo-eks-cluster"
@@ -51,8 +53,13 @@ aws iam attach-role-policy --policy-arn $POLICY_ARN --role-name $ADDON_NODE_GROU
 ```
 
 ```shell
+curl -O https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
+```
+
+```shell
 sed -i "s|<YOUR CLUSTER NAME>|$EKS_CLUSTER_NAME|g" ./cluster-autoscaler-autodiscover.yaml
-sed -i 's|v1.32.1|v1.34.2|g' cluster-autoscaler-autodiscover.yaml
+sed -i 's|v1.32.1|v1.35.0|g' cluster-autoscaler-autodiscover.yaml
+sed -i '/prometheus.io\/port/a\        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"' your-file.yaml
 sed -i "/prometheus.io\/port/a\        cluster-autoscaler.kubernetes.io/safe-to-evict: 'false'" cluster-autoscaler-autodiscover.yaml
 sed -i '/node-group-auto-discovery/a\            - --balance-similar-node-groups\n            - --skip-nodes-with-system-pods=false\n            - --scale-down-unneeded-time=1m\n            - --scale-down-utilization-threshold=0.5' cluster-autoscaler-autodiscover.yaml
 ```
