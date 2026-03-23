@@ -1,0 +1,18 @@
+### Setup Pod
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+  namespace: demo
+spec:
+  containers:
+  - name: demo-cnt
+    image: IMAGE
+    ports:
+    - containerPort: 8080
+```
+
+```shell
+kubectl apply -f pod.yaml
+```

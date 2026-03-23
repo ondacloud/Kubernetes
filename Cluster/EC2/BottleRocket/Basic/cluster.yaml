@@ -1,0 +1,57 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS_CLUSTER_NAME
+  version: "EKS_CLUSTER_VERSION"
+  region: REGION_CODE
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+
+vpc:
+  subnets:
+    public:
+      REGION_CODEa: { id: PUBLIC_A }
+      REGION_CODEb: { id: PUBLIC_B }
+      REGION_CODEc: { id: PUBLIC_C }
+    private:
+      REGION_CODEa: { id: PRIVATE_A }
+      REGION_CODEb: { id: PRIVATE_B }
+      REGION_CODEc: { id: PRIVATE_C }
+
+managedNodeGroups:
+  - name: EKS_APP_NODE_GROUP_NAME
+    labels: { type: app }
+    instanceName: EKS_APP_NODE_GROUP_NAME
+    instanceType: EKS_APP_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    amiFamily: Bottlerocket
+
+  - name: EKS_ADDON_NODE_GROUP_NAME
+    labels: { type: addon }
+    instanceName: EKS_ADDON_NODE_GROUP_NAME
+    instanceType: EKS_ADDON_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    amiFamily: Bottlerocket

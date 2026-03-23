@@ -1,0 +1,29 @@
+### Setup Deployment
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deploy
+  namespace: demo
+  labels:
+    app: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: demo-cnt
+        image: IMAGE
+        ports:
+        - containerPort: 8080
+```
+
+```shell
+kubectl apply -f deployment.yaml
+```

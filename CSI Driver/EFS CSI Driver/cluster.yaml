@@ -1,0 +1,78 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS_CLUSTER_NAME
+  version: "EKS_CLUSTER_VERSION"
+  region: REGION_CODE
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
+iamIdentityMappings:
+  - arn: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
+    groups:
+      - system:masters
+    username: admin
+    noDuplicateARNs: true
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+  - metadata:
+      name: ebs-csi-controller-sa
+      namespace: kube-system
+    wellKnownPolicies:
+      ebsCSIController: true
+  - metadata:
+      name: efs-csi-controller-sa
+      namespace: kube-system
+    wellKnownPolicies:
+      efsCSIController: true
+
+vpc:
+  subnets:
+    public:
+      REGION_CODEa: { id: PUBLIC_A }
+      REGION_CODEb: { id: PUBLIC_B }
+      REGION_CODEc: { id: PUBLIC_C }
+    private:
+      REGION_CODEa: { id: PRIVATE_A }
+      REGION_CODEb: { id: PRIVATE_B }
+      REGION_CODEc: { id: PRIVATE_C }
+
+managedNodeGroups:
+  - name: EKS_APP_NODE_GROUP_NAME
+    labels: { type: app }
+    instanceName: EKS_APP_NODE_GROUP_NAME
+    instanceType: EKS_APP_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/EKS_CLUSTER_NAME: "owned"
+
+  - name: EKS_ADDON_NODE_GROUP_NAME
+    labels: { type: addon }
+    instanceName: EKS_ADDON_NODE_GROUP_NAME
+    instanceType: EKS_ADDON_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/EKS_CLUSTER_NAME: "owned"

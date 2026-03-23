@@ -1,0 +1,7 @@
+# nodeSelector: {
+#   eks.amazonaws.com/nodegroup: EKS_NODE_GROUP_NAME
+# }
+
+nodeSelector: {
+  type: addon
+}

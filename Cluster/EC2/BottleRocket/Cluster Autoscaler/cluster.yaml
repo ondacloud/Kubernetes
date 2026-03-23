@@ -1,0 +1,85 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS_CLUSTER_NAME
+  version: "EKS_CLUSTER_VERSION"
+  region: REGION_CODE
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+  - metadata:
+      name: cluster-autoscaler
+      namespace: kube-system
+      labels: {aws-usage: "cluster-ops"}
+    wellKnownPolicies:
+      autoScaler: true
+  - metadata:
+      name: autoscaler-service
+      namespace: kube-system
+    attachPolicy:
+      Version: "2012-10-17"
+      Statement:
+      - Effect: Allow
+        Action:
+        - "autoscaling:DescribeAutoScalingGroups"
+        - "autoscaling:DescribeAutoScalingInstances"
+        - "autoscaling:DescribeLaunchConfigurations"
+        - "autoscaling:DescribeTags"
+        - "autoscaling:SetDesiredCapacity"
+        - "autoscaling:TerminateInstanceInAutoScalingGroup"
+        - "ec2:DescribeLaunchTemplateVersions"
+        Resource: '*'
+
+vpc:
+  subnets:
+    public:
+      REGION_CODEa: { id: PUBLIC_A }
+      REGION_CODEb: { id: PUBLIC_B }
+      REGION_CODEc: { id: PUBLIC_C }
+    private:
+      REGION_CODEa: { id: PRIVATE_A }
+      REGION_CODEb: { id: PRIVATE_B }
+      REGION_CODEc: { id: PRIVATE_C }
+
+managedNodeGroups:
+  - name: EKS_APP_NODE_GROUP_NAME
+    labels: { type: app }
+    instanceName: EKS_APP_NODE_GROUP_NAME
+    instanceType: EKS_APP_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    amiFamily: Bottlerocket
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/EKS_CLUSTER_NAME: "owned"
+
+  - name: EKS_ADDON_NODE_GROUP_NAME
+    labels: { type: addon }
+    instanceName: EKS_ADDON_NODE_GROUP_NAME
+    instanceType: EKS_ADDON_NODE_GROUP_INSTANCE_TYPE
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 20
+    privateNetworking: true
+    amiFamily: Bottlerocket
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/EKS_CLUSTER_NAME: "owned"

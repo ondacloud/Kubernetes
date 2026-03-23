@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: demo-network-policy
+  namespace: demo
+spec:
+  podSelector:
+    matchLabels:
+      app: a # 적용할 대상을 지정.
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: b # 통신되는 대상 지정.

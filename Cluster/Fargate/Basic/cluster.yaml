@@ -1,0 +1,50 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS_CLUSTER_NAME
+  version: "EKS_CLUSTER_VERSION"
+  region: REGION_CODE
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+
+vpc:
+  subnets:
+    public:
+      REGION_CODEa: { id: public_a }
+      REGION_CODEb: { id: public_b }
+      REGION_CODEc: { id: public_c }
+    private:
+      REGION_CODEa: { id: private_a }
+      REGION_CODEb: { id: private_b }
+      REGION_CODEc: { id: private_c }
+      
+fargateProfiles:
+  - name: EKS_DEFAULT_FARGATE_PROFILE_NAME
+    selectors:
+      - namespace: default
+      - namespace: kube-system
+      - namespace: cert-manager
+  - name: EKS_FARGATE_PROFILE_NAME
+    selectors:
+      - namespace: NAMESPACE_NAME
+        labels:
+          fargate: ture
+    tags:
+      FARGATE_KEY: "FARGATE_VALUE

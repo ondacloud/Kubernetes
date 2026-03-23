@@ -1,0 +1,18 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: fsx-sc
+provisioner: fsx.csi.aws.com
+parameters:
+  subnetId: SUBNET_ID
+  securityGroupIds: SECURITY_GROUP_ID
+  deploymentType: PERSISTENT_1
+  automaticBackupRetentionDays: "1"
+  dailyAutomaticBackupStartTime: "00:00"
+  copyTagsToBackups: "true"
+  perUnitStorageThroughput: "200"
+  dataCompressionType: "NONE"
+  weeklyMaintenanceStartTime: "7:09:00"
+  fileSystemTypeVersion: "2.12"
+mountOptions:
+  - flock

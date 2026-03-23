@@ -1,0 +1,8 @@
+controller:
+  podAnnotations:
+    linkerd.io/inject: ingress
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+      # service.beta.kubernetes.io/aws-load-balancer-scheme: internal
