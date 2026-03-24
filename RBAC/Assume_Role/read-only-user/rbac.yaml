@@ -1,0 +1,22 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: read-only-user-role
+  namespace: demo
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["list", "get", "describe", "watch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: read-only-user-rolebinding
+  namespace: demo
+subjects:
+  - kind: Group
+    name: read-only-user
+roleRef:
+  kind: Role
+  name: read-only-user-role
+  apiGroup: rbac.authorization.k8s.io
