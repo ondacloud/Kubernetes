@@ -1,0 +1,12 @@
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: demo-sgp
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: demo
+  securityGroups:
+    groupIds:
+      - SECURITY_GROUP_ID
