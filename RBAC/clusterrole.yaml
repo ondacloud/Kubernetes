@@ -4,5 +4,5 @@ metadata:
   name: <CLUSTERROLE_NAME>
 rules:
 - apiGroups: [""]
-  resources: ["<value>"]
-  verbs: ["<value>", "<value>", "<value>"]
+  resources: ["<VALUE>"]
+  verbs: ["<VALUE>", "<VALUE>", "<VALUE>"]
