@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-latest-tag
+  annotations:
+    policies.kyverno.io/title: Restrict Latest Tag
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      This policy restricts the use of the 'latest' tag in the 'prod' namespace.
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: disallow-latest-tag-in-prod
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - prod
+      validate:
+        message: "Using 'latest' tag is not allowed in 'prod' namespace."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"

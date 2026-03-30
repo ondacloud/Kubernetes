@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-dockerhub-images
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: allow-only-nginx
+      match:
+        resources:
+          kinds:
+            - Pod
+      validate:
+        pattern:
+          spec:
+            containers:
+              - image: "nginx:*"
