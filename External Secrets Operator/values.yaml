@@ -1,0 +1,16 @@
+{
+  "installCRDs": true,
+  "nodeSelector": {
+    "type": "addon"
+  },
+  "webhook": {
+    "nodeSelector": {
+      "type": "addon"
+    }
+  },
+  "certController": {
+    "nodeSelector": {
+      "type": "addon"
+    }
+  }
+}
