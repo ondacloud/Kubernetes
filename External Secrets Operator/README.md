@@ -3,8 +3,6 @@
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 REGION_CODE="ap-northeast-2"
 EKS_CLUSTER_NAME="demo-eks-cluster"
-APP_EKS_NODE_GROUP_NAME="demo-app-node"
-ADDON_EKS_NODE_GROUP_NAME="demo-addon-node"
 SECRETS_MANAGER_NAME="demo-secrets"
 ```
 
