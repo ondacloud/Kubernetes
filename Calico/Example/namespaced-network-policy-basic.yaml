@@ -1,0 +1,5 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: demo-np
+  namespace: demo

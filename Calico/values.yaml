@@ -1,0 +1,17 @@
+installation:
+  enabled: true
+  cni:
+    type: Calico
+    ipam:
+      type: Calico
+  calicoNetwork:
+    bgp: Disabled
+    ipPools:
+    - cidr: 192.168.32.0/26
+      encapsulation: VXLAN
+      natOutgoing: Enabled
+      nodeSelector: type == "app"
+    - cidr: 192.168.32.64/26
+      encapsulation: VXLAN
+      natOutgoing: Enabled
+      nodeSelector: type == "addon"

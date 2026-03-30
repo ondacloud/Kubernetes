@@ -1,0 +1,15 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: dmeo-gnp
+spec:
+  order: 20
+  #...deny policy rules here...
+---
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: demo-gnp
+spec:
+  order: 10
+  #...allow policy rules here...
