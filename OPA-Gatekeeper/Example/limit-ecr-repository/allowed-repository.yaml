@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-allowed
+spec:
+  containers:
+    - name: shared-nginx
+      image: ECR_URL:IMAGE_TAG
+      command:
+        - sleep
+        - "3600"
+      resources:
+        limits:
+          cpu: "100m"
+          memory: "30Mi"

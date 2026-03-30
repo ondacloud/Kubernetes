@@ -1,0 +1,18 @@
+apiVersion: mutations.gatekeeper.sh/v1
+kind: Assign
+metadata:
+  name: demo-mutator-node-selector
+  namespace: gatekeeper-system
+spec:
+  applyTo:
+  - groups: ["apps"]
+    kinds: ["Deployment"]
+    versions: ["v1"]
+  match:
+    namespaces:
+    - "demo"
+  location: "spec.template.spec.nodeSelector"
+  parameters:
+    assign:
+      value:
+        eks.amazonaws.com/nodegroup: demo-app-node

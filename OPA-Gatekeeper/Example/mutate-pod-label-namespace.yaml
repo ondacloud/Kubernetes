@@ -1,0 +1,16 @@
+apiVersion: mutations.gatekeeper.sh/v1alpha1
+kind: AssignMetadata
+metadata:
+  name: add-gk-label-to-demo-pods
+  namespace: gatekeeper-system
+spec:
+  match:
+    scope: Namespaced
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces: ["demo"]
+  location: "metadata.labels.controlled-by" # <--- controlled-by: gatekeeper
+  parameters:
+    assign:
+      value: "gatekeeper"

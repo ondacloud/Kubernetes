@@ -1,0 +1,14 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: AllowedRepos
+metadata:
+  name: allowed-repo
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "default"
+  parameters:
+    repos:
+      - "ACCOUNT_ID.dkr.ecr.REGION_CODE.amazonaws.com/"
