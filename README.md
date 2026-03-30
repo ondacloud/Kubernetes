@@ -47,9 +47,17 @@ helm version
 ```
 
 [**k9s**](https://github.com/derailed/k9s/releases)
-```sh
+```shell
 curl -LO https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Linux_amd64.tar.gz
 tar -xf k9s_Linux_amd64.tar.gz
 chmod +x k9s
 sudo mv k9s /usr/local/bin
+```
+
+[**kubectx & kubens**](https://github.com/ahmetb/kubectx)
+```shell
+sudo dnf install -y git
+git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
 ```
