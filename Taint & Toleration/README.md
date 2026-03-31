@@ -2,10 +2,10 @@
 **Taint**
 ```shell
 # Add Taint
-kubectl taint node <Node Name> <key>=<value>:<effect>
+kubectl taint node <NODE_GROUP_NAME> <KEY>=<VALUE>:<EFFECT>
 
 # Delete Taint
-kubectl taint node <Node Name> <key>=<value>:<effect> -
+kubectl taint node <NODE_GROUP_NAME> <KEY>=<VALUE>:<EFFECT> -
 ```
 
 **Toleration**
@@ -26,7 +26,6 @@ tolerations:
 	effect: NoExecute
 
 # Taint Allow with Role=System:Effect=NoSchedule
-```yaml
 tolerations:
 - key: role
   operator: Equal
