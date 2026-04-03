@@ -195,6 +195,7 @@ mountOptions:
 ```shell
 sed -i "s|SUBNET_ID|$SUBNET_ID|g" sc.yaml
 sed -i "s|SECURITY_GROUP_ID|$FSX_SECURITY_GROUP_ID|g" sc.yaml
+```
 
 ```shell
 kubectl apply -f sc.yaml
