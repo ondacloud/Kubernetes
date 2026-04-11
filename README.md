@@ -57,7 +57,7 @@ sudo mv k9s /usr/local/bin
 [**kubectx & kubens**](https://github.com/ahmetb/kubectx)
 ```shell
 sudo dnf install -y git
-git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
 sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
 ```
