@@ -1,4 +1,5 @@
 ### EKS Service Account
+
 **AWS Load Balancer Controller**
 ```yaml
   - metadata:
@@ -7,6 +8,8 @@
     wellKnownPolicies:
       awsLoadBalancerController: true
 ```
+
+<br>
 
 **cert-manager**
 ```yaml
@@ -17,6 +20,8 @@
       certManager: true
 ```
 
+<br>
+
 **EBS CSI Driver**
 ```yaml
   - metadata:
@@ -25,6 +30,8 @@
     wellKnownPolicies:
       ebsCSIController: true
 ```
+
+<br>
 
 **EFS CSI Driver**
 ```yaml
@@ -35,6 +42,8 @@
       efsCSIController: true
 ```
 
+<br>
+
 **FSx CSI Driver**
 ```yaml
   - metadata:
@@ -43,6 +52,8 @@
     managedPolicies:
       - "arn:aws:iam::aws:policy/AmazonFSxFullAccess"
 ```
+
+<br>
 
 **File Cache CSI Driver**
 ```yaml
@@ -73,6 +84,8 @@
         Resource: '*'
 ```
 
+<br>
+
 **External DNS**
 ```yaml
   - metadata:
@@ -88,9 +101,11 @@
         Resource: "*"
 ```
 
+<br>
+
 **External Secrets**
 ```yaml
-- metadata:
+  - metadata:
     name: external-secrets-cert-controller
     namespace: kube-system
   attachPolicy:
@@ -108,6 +123,8 @@
           - kms:Decrypt
         Resource: "*"
 ```
+
+<br>
 
 **Cluster AutoScaler**
 ```yaml
