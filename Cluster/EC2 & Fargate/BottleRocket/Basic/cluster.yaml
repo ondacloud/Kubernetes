@@ -66,6 +66,6 @@ fargateProfiles:
     selectors:
       - namespace: NAMESPACE_NAME
         labels:
-          fargate: ture
+          type: fargate
     tags:
-      FARGATE_KEY: "FARGATE_VALUE
+      FARGATE_KEY: "FARGATE_VALUE"
